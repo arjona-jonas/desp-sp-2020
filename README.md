@@ -53,7 +53,7 @@ colnames(cand_2020)
 table(desp_2020$DS_DETALHE_SITUACAO_CAND)
 ```
 
-![imagem](https://raw.githubusercontent.com/arjona-jonas/desp-sp-2020/main/imagens/colnames-table-cand.png "imagem 1")
+![imagem](imagens/colnames-table-cand.png "imagem 1")
 
 
 Muitas variáveis redundantes e muitas formas de atestar indeferência. Nas próximas linhas, reduzidos as variáveis e filtramos pela deferência.
@@ -81,7 +81,7 @@ Temos abaixo o **head** do nosso data.frame
 ```r
 head(desp_cand_2020)
 ```
-![imagem](https://raw.githubusercontent.com/arjona-jonas/desp-sp-2020/main/imagens/head.png "imagem 2")
+![imagem](imagens/head.png "imagem 2")
 
 Antes de finalizarmos esse passo, vamos checar um dar implicações do nosso join. O **inner_join** resultado num **data.frame** que só possui as observações que estão presentes nos dois objetos unidos. Logo, se tivéssemos um candidato sem despesas ou uma despesa sem candidato (algo muito improvável), ambos estariam excluídos de **desp_cand_2020**. Isso por si só já pode ser algo útil para uma análise já que podemos encontrar padrões de não-gasto, isto é, de menor investimento e/ou até desamparo por parte dos partidos dessas candidaturas.
 Então coletaremos os **SQ_CANDIDATO** de **cand_2020** que não se encontram em **desp_2020**, ou seja, candidaturas registradas e deferidas, mas que não possuem gastos.
@@ -96,7 +96,7 @@ n_gasto %>%
   summarise(contagem = n())
 ```
 
-![imagem](https://raw.githubusercontent.com/arjona-jonas/desp-sp-2020/main/imagens/n_gasto.png "imagem 3")
+![imagem](imagens/n_gasto.png "imagem 3")
 
 Muito mais candidaturas à vereador não fizeram gastos do que aquelas para prefeito, tanto em números absolutos quanto em proporções. Vice-prefeitos não são votados mas precisam ser registrados e ficam sob a campanha principal do prefeito, o que explica a discrepâncias. Outros cruzamentos, como sexo, partido, idade e cor/raça podem eventualmente mostrar outros achados. 
 
@@ -110,7 +110,7 @@ Inicialmente, executaremos a função **str**, que descreve o tipo de dados que 
 str(desp_cand_2020)
 ```
 
-![imagem](https://raw.githubusercontent.com/arjona-jonas/desp-sp-2020/main/imagens/str.png "imagem 4")
+![imagem](imagens/str.png "imagem 4")
 
 Em seguida, medidas-resumo da nossa variável de interesse, **VR_DESPESA_CONTRATADA**, o valor em reais da despesa contratada.
 
@@ -118,5 +118,5 @@ Em seguida, medidas-resumo da nossa variável de interesse, **VR_DESPESA_CONTRAT
 summary(desp_cand_2020$VR_DESPESA_CONTRATADA)
 ```
 
-![imagem](https://raw.githubusercontent.com/arjona-jonas/desp-sp-2020/main/imagens/summary.png "imagem 5")
+![imagem](imagens/summary.png "imagem 5")
 

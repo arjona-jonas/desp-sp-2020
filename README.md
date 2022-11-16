@@ -457,13 +457,6 @@ desp_cand_2020 %>%
 
 ![imagem](imagens/soma_tipo_despesa.png "imagem 23")
 
-> Da mesma forma que fizemos com o objeto **tema** criado antes, iremos criar outro objeto para configurações estéticas que armazenará a escala personalizada de cores para **TIPO_DESPESA**.  
-```r
-cores <- scale_fill_manual(values = c("#f6b395","#f6e095",
-                                      "#b9f695","#acf5ed",
-                                      "#acbff5","#eaacf5"))
-```
-
 Ainda preparando os dados, iremos fazer mais dois **mutates**. O primeiro irá criar faixas-etárias, gerando sete grupos etários. O segundo irá aglutinar os valores da variável **DS_COR_RACA** em dois grupos: brancos e não brancos. Abaixo temos os dois códigos e os dois **summarise**.
 
 ```r
@@ -526,3 +519,9 @@ desp_cand_2020 %>%
 ![imagem](imagens/contagem_raça2_unique.png "imagem 27")
 
 ## Quinto passo: cruzamentos e análise
+> Da mesma forma que fizemos com o objeto **tema** criado antes, iremos criar outro objeto para configurações estéticas que armazenará a escala personalizada de cores para **TIPO_DESPESA**.  
+```r
+cores <- scale_fill_manual(values = c("#f6b395","#f6e095",
+                                      "#b9f695","#acf5ed",
+                                      "#acbff5","#eaacf5"))
+```

@@ -291,7 +291,7 @@ Poderíamos prosseguir testando mais e mais relações, nosso banco possui outra
 
 ## Quarto passo: preparação à análise
 
-> Daqui em diante iremos gerar alguns gráficos como antes, mas agora zelando pelo aspecto estético. Logo, os códigos ficarão maiores. Além disso, optamos por criar alguns objetos que serão usados para armazenar configruações de estética. Abaixo temos um deles, o **tema**.
+> Daqui em diante iremos gerar alguns gráficos como antes, mas agora zelando pelo aspecto estético. Logo, os códigos ficarão maiores. Além disso, optamos por criar alguns objetos que serão usados para armazenar configurações de estética. Abaixo temos um deles, o **tema**.
 ```r
 tema <- theme(title = element_text(size = 20),
               axis.title = element_text(size = 17.5),

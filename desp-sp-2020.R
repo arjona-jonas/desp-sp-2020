@@ -1,16 +1,16 @@
 ###Jonas Arjona
 ##26/10/2022
-##PROJETO DE AN¡LISE DE DADOS DE DESPESAS ELEITORAIS
+##PROJETO DE AN√ÅLISE DE DADOS DE DESPESAS ELEITORAIS
 
 #WORKING DIRECTORY 
-setwd("E:/ANTES DA MUDAN«A/Jonas/quanti R/github/desp-sp-2020")
+setwd("[INSIRA SEU DIRET√ìRIO DE ESCOLHA]")
 getwd()
 
 #PACOTES
 library(tidyverse)
 library(ggplot2)
 
-#DESABILITAR NOTA«√O CIENTÕFICA
+#DESABILITAR NOTA√á√ÉO CIENT√çFICA
 options(scipen = 999)
 
 #DADOS
@@ -20,7 +20,7 @@ cand_2020 <- read.csv(file = "consulta_cand_2020_SP.csv",header = T, sep = ";",
 desp_2020 <- read.csv(file = "despesas_contratadas_candidatos_2020_SP.csv",header = T, sep = ";", 
                       fileEncoding = "latin1",dec = ",")
 
-#SELE«√O DAS OBSERVA«’ES EM cand_2020 (APENAS DEFERIDOS DE FATO) E DE VARI¡VEIS
+#SELE√á√ÉO DAS OBSERVA√á√ïES EM cand_2020 (APENAS DEFERIDOS DE FATO) E DE VARI√ÅVEIS
 #RELEVANTES
 
 colnames(cand_2020)
@@ -33,14 +33,14 @@ cand_2020<- cand_2020 %>%
   filter(DS_DETALHE_SITUACAO_CAND %in% sel_sit) %>% 
   select(-all_of(var_rem))
 
-#CRIA«√O DO DF FINAL
+#CRIA√á√ÉO DO DF FINAL
 desp_cand_2020 <- inner_join(desp_2020,cand_2020,by = "SQ_CANDIDATO") %>% 
   select(1:21,55:66,22:53)
 
-#CHECANDO N√O-GASTO
+#CHECANDO N√ÉO-GASTO
 n_gasto <- cand_2020 %>% 
   mutate(FEZ_GASTO = ifelse(SQ_CANDIDATO %in% desp_2020$SQ_CANDIDATO,
-                            "SIM","N√O"))
+                            "SIM","N√ÉO"))
 
 n_gasto %>% 
   group_by(DS_CARGO,FEZ_GASTO) %>% 
@@ -48,7 +48,7 @@ n_gasto %>%
 
 #PODEMOS OBSERVAR A QUANTIDADE DE CONTAS PRESTADAS, OU SEJA,
 #A QUANTIDADE DE DESPESAS CONTRATADAS POR PARTIDO,SEXO,CARGO,ETC.
-#PODEMOS AINDA RETIRAR A M…DIA, MIN E MAX
+#PODEMOS AINDA RETIRAR A M√âDIA, MIN E MAX
 
 #PARTIDO
 desp_cand_2020 %>% 
@@ -84,7 +84,7 @@ desp_cand_2020 %>%
   ggplot()+
   geom_col(aes(x=reorder(DS_GENERO,contagem,sum),y=contagem))
 
-#COR/RA«A
+#COR/RA√áA
 desp_cand_2020 %>% 
   group_by(DS_COR_RACA) %>% 
   summarise(contagem = n(),
@@ -140,7 +140,7 @@ desp_cand_2020 %>%
          VR_DESPESA_CONTRATADA)
 
 
-#A VARI¡VEL DS_ORIGEM_DESPESA DESCREVE A DESPESA NO FORMATO PR”PRIO DO TSE
+#A VARI√ÅVEL DS_ORIGEM_DESPESA DESCREVE A DESPESA NO FORMATO PR√ìPRIO DO TSE
 
 desp_cand_2020 %>% 
   group_by(DS_ORIGEM_DESPESA) %>% 
@@ -180,69 +180,69 @@ desp_cand_2020 %>%
   tema
 
 
-#A SOLU«√O ESCOLHIDA FOI RECATEGORIZAR AS DESPESAS COM BASE EM OUTROS
-#ESFOR«OS DESENVOLVIDOS POR PARES.
+#A SOLU√á√ÉO ESCOLHIDA FOI RECATEGORIZAR AS DESPESAS COM BASE EM OUTROS
+#ESFOR√áOS DESENVOLVIDOS POR PARES.
 
 #O EFEITO FINAL SERIA GRANDES GRUPOS DE DESPESAS QUE, APESAR DE SEREM
 #DIFERENTES, SERIAM MENOS DIFERENTES ENTRE SI DO QUE AS DESPESAS LIVRES.
 
-#PARA CHECAR OS PORMENORES DA RECATEGORIZA«√O, VER CERVI, VASCONCELLOS E 
+#PARA CHECAR OS PORMENORES DA RECATEGORIZA√á√ÉO, VER CERVI, VASCONCELLOS E 
 #CAVASSANA (2021).
 
-#ABAIXO CRIAMOS 6 OBJETOS DISTINTOS QUE SER√O USADOS PARA AGLUTINAR DESPESAS E
-#SEREM REFERENCIADOS NUMA COMBINA«√O DE mutate E case_when
+#ABAIXO CRIAMOS 6 OBJETOS DISTINTOS QUE SER√ÉO USADOS PARA AGLUTINAR DESPESAS E
+#SEREM REFERENCIADOS NUMA COMBINA√á√ÉO DE mutate E case_when
 
-com_dig<-c("CriaÁ„o e inclus„o de p·ginas na internet",
-           "Despesa com Impulsionamento de Conte˙dos",
+com_dig<-c("Cria√ß√£o e inclus√£o de p√°ginas na internet",
+           "Despesa com Impulsionamento de Conte√∫dos",
            "Despesas com Hospedagem",
-           "Taxa de AdministraÁ„o de Financiamento Coletivo")
+           "Taxa de Administra√ß√£o de Financiamento Coletivo")
 
-com_tradicional<-c("Atividades de milit‚ncia e mobilizaÁ„o de rua",
-                   "ComÌcios",
-                   "ProduÁ„o de jingles, vinhetas e slogans",
-                   "ProduÁ„o de programas de r·dio, televis„o ou vÌdeo",
+com_tradicional<-c("Atividades de milit√¢ncia e mobiliza√ß√£o de rua",
+                   "Com√≠cios",
+                   "Produ√ß√£o de jingles, vinhetas e slogans",
+                   "Produ√ß√£o de programas de r√°dio, televis√£o ou v√≠deo",
                    "Publicidade por adesivos",
                    "Publicidade por carros de som",
                    "Publicidade por jornais e revistas",
                    "Publicidade por materiais impressos")
 
 pessoal<-c("Despesas com pessoal",
-           "ServiÁos prestados por terceiros",
-           "ServiÁos prÛprios prestados por terceiros")
+           "Servi√ßos prestados por terceiros",
+           "Servi√ßos pr√≥prios prestados por terceiros")
 
-administrativa<-c("AlimentaÁ„o",
-                  "CombustÌveis e lubrificantes",
-                  "CorrespondÍncias e despesas postais",
+administrativa<-c("Alimenta√ß√£o",
+                  "Combust√≠veis e lubrificantes",
+                  "Correspond√™ncias e despesas postais",
                   "Despesas com transporte ou deslocamento",
-                  "DoaÁıes financeiras a outros candidatos/partidos",
-                  "Encargos financeiros, taxas banc·rias e/ou op. cart„o de crÈdito",
+                  "Doa√ß√µes financeiras a outros candidatos/partidos",
+                  "Encargos financeiros, taxas banc√°rias e/ou op. cart√£o de cr√©dito",
                   "Encargos sociais",
-                  "Eventos de promoÁ„o da candidatura",
-                  "Impostos, contribuiÁıes e taxas",
+                  "Eventos de promo√ß√£o da candidatura",
+                  "Impostos, contribui√ß√µes e taxas",
                   "Materiais de expediente",
                   "Multas eleitorais",
-                  "Passagem AÈrea",
+                  "Passagem A√©rea",
                   "Pesquisas ou testes eleitorais",
                   "Reembolsos de gastos realizados por eleitores",
-                  "ServiÁos advocatÌcios",
-                  "ServiÁos cont·beis")
+                  "Servi√ßos advocat√≠cios",
+                  "Servi√ßos cont√°beis")
 
 infra<-c("Telefone",
-         "¡gua",
-         "AquisiÁ„o/DoaÁ„o de bens mÛveis ou imÛveis",
-         "Cess„o ou locaÁ„o de veÌculos",
-         "Energia elÈtrica",
-         "LocaÁ„o/cess„o de bens imÛveis",
-         "LocaÁ„o/cess„o de bens mÛveis (exceto veÌculos)",
-         "PrÈ-instalaÁ„o fÌsica de comitÍ de campanha",
+         "√Ågua",
+         "Aquisi√ß√£o/Doa√ß√£o de bens m√≥veis ou im√≥veis",
+         "Cess√£o ou loca√ß√£o de ve√≠culos",
+         "Energia el√©trica",
+         "Loca√ß√£o/cess√£o de bens im√≥veis",
+         "Loca√ß√£o/cess√£o de bens m√≥veis (exceto ve√≠culos)",
+         "Pr√©-instala√ß√£o f√≠sica de comit√™ de campanha",
          "Despesa com geradores de energia")
 
 div<-"Diversas a especificar"
 
 desp_cand_2020 <- desp_cand_2020 %>% 
   mutate(TIPO_DESPESA=case_when(
-    DS_ORIGEM_DESPESA %in% com_dig~"ComunicaÁ„o digital",
-    DS_ORIGEM_DESPESA %in% com_tradicional~"ComunicaÁ„o tradicional",
+    DS_ORIGEM_DESPESA %in% com_dig~"Comunica√ß√£o digital",
+    DS_ORIGEM_DESPESA %in% com_tradicional~"Comunica√ß√£o tradicional",
     DS_ORIGEM_DESPESA %in% pessoal~"Despesas com pessoal",
     DS_ORIGEM_DESPESA %in% administrativa~"Despesas administrativas",
     DS_ORIGEM_DESPESA %in% infra~"Infraestrutura",
@@ -264,7 +264,7 @@ desp_cand_2020 %>%
   ggplot()+
   geom_col(aes(x = reorder(TIPO_DESPESA,contagem,sum),y = contagem))+
   coord_flip()+
-  labs(title = "N˙mero de despesas declaradas por tipo",
+  labs(title = "N√∫mero de despesas declaradas por tipo",
        y = "Quantidade de despesas",
        x = "Tipo de despesa")+
   tema
@@ -283,7 +283,7 @@ desp_cand_2020 %>%
   tema
 
 
-#FAIXA ET¡RIA
+#FAIXA ET√ÅRIA
 desp_cand_2020 <- desp_cand_2020 %>% 
   mutate(FAIXA_ETARIA = case_when(
     NR_IDADE_DATA_POSSE %in% 18:25 ~ "18-25",
@@ -309,14 +309,14 @@ desp_cand_2020 %>%
   summarise(contagem = n()) %>% 
   arrange(desc(contagem))
 
-#COR/RA«A2
+#COR/RA√áA2
 branca <- "BRANCA"
-nao_branca <- c("AMARELA","INDÕGENA","PARDA","PRETA","N√O INFORMADO")
+nao_branca <- c("AMARELA","IND√çGENA","PARDA","PRETA","N√ÉO INFORMADO")
 
 desp_cand_2020 <- desp_cand_2020 %>% 
   mutate(DS_COR_RACA2 = case_when(
     DS_COR_RACA %in% branca ~ "BRANCA",
-    DS_COR_RACA %in% nao_branca ~ "N√O-BRANCA"
+    DS_COR_RACA %in% nao_branca ~ "N√ÉO-BRANCA"
   ))
 
 desp_cand_2020 %>% 
@@ -378,14 +378,14 @@ desp_cand_2020 %>%
                fill = TIPO_DESPESA),
            position = "dodge")+
   labs(title = "Total gasto por cargo e tipo de despesa",
-       subtitle = "ExcluÌdos vice-prefeitos",
+       subtitle = "Exclu√≠dos vice-prefeitos",
        x = "Cargo",
        y = "Total gasto (reais)",
        fill = "Tipo de despesa")+
   cores+
   tema
 
-#TIPO_DESPESA E PARTIDO (GR¡FICO ORGANIZADO POR TOTAL GASTO)
+#TIPO_DESPESA E PARTIDO (GR√ÅFICO ORGANIZADO POR TOTAL GASTO)
 desp_cand_2020 %>% 
   group_by(SG_PARTIDO,TIPO_DESPESA) %>% 
   summarise(soma = sum(VR_DESPESA_CONTRATADA)) %>% 
@@ -474,14 +474,14 @@ desp_cand_2020 %>%
                y=soma,
                fill=TIPO_DESPESA),
            position = "dodge")+
-  labs(title = "Total gasto por faixa et·ria e tipo de despesa",
-       x = "Faixa et·ria",
+  labs(title = "Total gasto por faixa et√°ria e tipo de despesa",
+       x = "Faixa et√°ria",
        y = "Total gasto (reais)",
        fill = "Tipo de despesa")+
   cores+
   tema
 
-#TIPO_DESPESA E COR/RA«A BIN¡RIA
+#TIPO_DESPESA E COR/RA√áA BIN√ÅRIA
 desp_cand_2020 %>% 
   group_by(DS_COR_RACA2,TIPO_DESPESA) %>% 
   summarise(contagem = n(),
@@ -495,57 +495,57 @@ desp_cand_2020 %>%
   geom_col(aes(x=DS_COR_RACA2,
                y=soma,
                fill = TIPO_DESPESA),position = "dodge")+
-  labs(title = "Total gasto por cor/raÁa e tipo de despesa",
-       x = "Cor/raÁa",
+  labs(title = "Total gasto por cor/ra√ßa e tipo de despesa",
+       x = "Cor/ra√ßa",
        y = "Total gasto (reais)",
        fill = "Tipo de despesa")+
   cores+
   tema
 
-####RESULTADOS E CONCLUS’ES####
-#OLHANDO PARA NOSSOS GR¡FICOS PODEMOS CONCLUIR QUE AS DESPESAS COM COMUN.
-#TRAD., COM PESSOAL E ADMINISTRATIVAS S√O AS MAIS RECORRENTES EM TODOS OS
-#CASOS (IDADE, SEXO, CARGO, E PARTIDO). H¡ ALGUMAS PEQUENAS NUANCES NAS
-#NAS PROPOR«’ES, MAS O CEN¡RIO SE MANT…M O MESMO SEMPRE
+####RESULTADOS E CONCLUS√ïES####
+#OLHANDO PARA NOSSOS GR√ÅFICOS PODEMOS CONCLUIR QUE AS DESPESAS COM COMUN.
+#TRAD., COM PESSOAL E ADMINISTRATIVAS S√ÉO AS MAIS RECORRENTES EM TODOS OS
+#CASOS (IDADE, SEXO, CARGO, E PARTIDO). H√Å ALGUMAS PEQUENAS NUANCES NAS
+#NAS PROPOR√á√ïES, MAS O CEN√ÅRIO SE MANT√âM O MESMO SEMPRE
 
-#AL…M DISSO, AS DESPESAS S√O EM MAIOR QUANT. E TOTALIZAM MAIOR VALOR NAQUELAS
+#AL√âM DISSO, AS DESPESAS S√ÉO EM MAIOR QUANT. E TOTALIZAM MAIOR VALOR NAQUELAS
 #CANDIDATURAS SABIDAMENTE MAIS COMUNS: MASCULINAS, BRANCAS, ENTRE 36 E 56
 #ANOS.
 
-#QUANTO A PARTIDOS, AQUELES QUE MAIS LAN«AM CANDIDATURAS (OU SEJA,
+#QUANTO A PARTIDOS, AQUELES QUE MAIS LAN√áAM CANDIDATURAS (OU SEJA,
 #OS MAIORES PARTIDOS) POSSUEM AS MAIORES SOMAS E QUANTIDADES DE DESPESAS
 
 
 ####E A CAMPANHA DIGITAL?####
 
-#APESAR DO AMPLO DISCURSO DO USO DAS TICS NA COMUNICA«√O POLÕTICA, 
-#ELE N√O APARECE NAS DECLARA«’ES OFICIAIS DE CONTAS.
-#H¡ ALGUMA VARIA«√O ENTRE GENERO, CARGO, PARTIDO E IDADE MAS ELA … PEQUENA.
+#APESAR DO AMPLO DISCURSO DO USO DAS TICS NA COMUNICA√á√ÉO POL√çTICA, 
+#ELE N√ÉO APARECE NAS DECLARA√á√ïES OFICIAIS DE CONTAS.
+#H√Å ALGUMA VARIA√á√ÉO ENTRE GENERO, CARGO, PARTIDO E IDADE MAS ELA √â PEQUENA.
 
-#VARIA«’ES INTERESSANTES DE TESTAR SERIAM AQUELAS RELACIONADAS ¿ GEOGRAFIA:
-#PORTE DO MUNICÕPIO/ESTADO/REGI√O,IDH,COMPOSI«√O ET¡RIA,ACESSO AOS TICS, ETC.
+#VARIA√á√ïES INTERESSANTES DE TESTAR SERIAM AQUELAS RELACIONADAS √Ä GEOGRAFIA:
+#PORTE DO MUNIC√çPIO/ESTADO/REGI√ÉO,IDH,COMPOSI√á√ÉO ET√ÅRIA,ACESSO AOS TICS, ETC.
 
-#POSSÕVEIS EXPLICA«’ES (APENAS PARA ESTADO DE SP):
+#POSS√çVEIS EXPLICA√á√ïES (APENAS PARA ESTADO DE SP):
 
-#1-QUANDO COMPARADAS COM OUTRAS DESPESAS, O CUSTO-BENEFÕCIO DAS TICS PARECE
+#1-QUANDO COMPARADAS COM OUTRAS DESPESAS, O CUSTO-BENEF√çCIO DAS TICS PARECE
 #SER BEM MAIS VANTAJOSO PARA ELAS DO QUE PARA OUTRAS DESPESAS. OU SEJA, PODE
-#SER MAIS BARATO FAZER O MESMO USANDO TICS DO QUE USANDO DE M…TODOS DE 
-#CAMPANHA MAIS TRADICIONAIS. POR…M, SERIA PRECISO PROPOR M…TRICAS PARA TAL
-#COMPARA«√O (COMO UMA TAXA DE CONVERS√O ENTRE REAL GASTO-VOTO PARA AMBOS OS
-#TIPOS DE ESTRAT…GIA)
+#SER MAIS BARATO FAZER O MESMO USANDO TICS DO QUE USANDO DE M√âTODOS DE 
+#CAMPANHA MAIS TRADICIONAIS. POR√âM, SERIA PRECISO PROPOR M√âTRICAS PARA TAL
+#COMPARA√á√ÉO (COMO UMA TAXA DE CONVERS√ÉO ENTRE REAL GASTO-VOTO PARA AMBOS OS
+#TIPOS DE ESTRAT√âGIA)
 
 #2-MUITAS DAS VANTAGENS DE USAR TICS EM CAMPANHA ELEITORAL PODE SE DAR POR 
-#USOS INFORMAIS, N√O DECLAR¡VEIS, COMO ATRAV…S DE REDES DE RELA«’ES SOCIAIS 
-#DE GRUPOS ESPECÕFICOS (OCUPA«√O PROFISSIONAL, RELIGI√O, HOBBIES, ETC.).
+#USOS INFORMAIS, N√ÉO DECLAR√ÅVEIS, COMO ATRAV√âS DE REDES DE RELA√á√ïES SOCIAIS 
+#DE GRUPOS ESPEC√çFICOS (OCUPA√á√ÉO PROFISSIONAL, RELIGI√ÉO, HOBBIES, ETC.).
 
 #3-CAIXA DOIS
 
 
-#DE QUALQUER FORMA, PERSISTE A NO«√O DE QUE H¡ BASTANTE
-#DIFICULDADE EM AVALIARMOS, COM M…TRICAS, O USO DAS TICS EM CAMPANHAS,
-#MESMO QUANDO FALAMOS A TODO MOMENTO QUE ELAS S√O IMPORTANTES.
+#DE QUALQUER FORMA, PERSISTE A NO√á√ÉO DE QUE H√Å BASTANTE
+#DIFICULDADE EM AVALIARMOS, COM M√âTRICAS, O USO DAS TICS EM CAMPANHAS,
+#MESMO QUANDO FALAMOS A TODO MOMENTO QUE ELAS S√ÉO IMPORTANTES.
 
-#ABORDAGENS QUANTITATIVAS PARECEM SER MAIS FALHAS NESSA TEM¡TICA
+#ABORDAGENS QUANTITATIVAS PARECEM SER MAIS FALHAS NESSA TEM√ÅTICA
 
 
 
